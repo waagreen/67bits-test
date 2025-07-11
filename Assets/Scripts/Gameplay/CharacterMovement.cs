@@ -37,8 +37,9 @@ public class CharacterMovement : MonoBehaviour
         float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
 
-        Quaternion interpolatedRotation = Quaternion.Slerp(
-            rb.rotation, 
+        Quaternion interpolatedRotation = Quaternion.Slerp
+        (
+            rb.rotation,
             targetRotation,
             rotationSpeed * Time.deltaTime
         );
