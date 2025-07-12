@@ -5,29 +5,28 @@ public class CharacterMovement : MonoBehaviour
 {
     [SerializeField][Min(0f)] private float speed = 10f, acceleration = 30f, rotationSpeed = 50f;
 
-    // Variables set on start --
-    private Rigidbody rb;
-    private InputActions inputs;
+    protected Rigidbody rb;
+    protected Vector3 velocity = default;
+    protected Vector3 desiredVelocity = default;
+    protected Vector3 direction = default;
 
-    // Variables updated at runtime
-    private Vector3 velocity;
-    private Vector3 desiredVelocity;
-    private Vector3 direction;
+    public virtual Vector2 MovementInput { get; set; }
 
-    void Start()
+    protected virtual void Start()
     {
         rb = GetComponent<Rigidbody>();
-
-        inputs = new();
-        inputs.Enable();
     }
 
-    private void Update()
-    {
-        Vector2 movementInput = inputs.Player.Move.ReadValue<Vector2>();
-        
-        direction = new(movementInput.x, 0f, movementInput.y);
+    protected virtual void Update()
+    {      
+        direction = new(MovementInput.x, 0f, MovementInput.y);
         desiredVelocity = speed * direction;
+    }
+    
+    protected virtual void FixedUpdate()
+    {
+        HandleRotation();
+        HandleVelocity();
     }
 
     private void HandleRotation()
@@ -56,17 +55,5 @@ public class CharacterMovement : MonoBehaviour
         velocity.z = Mathf.MoveTowards(velocity.z, desiredVelocity.z, t);
 
         rb.linearVelocity = velocity;
-    }
-
-    private void FixedUpdate()
-    {
-        HandleRotation();
-        HandleVelocity();
-    }
-
-    private void OnDestroy()
-    {
-        inputs.Disable();
-        inputs = null;
     }
 }
