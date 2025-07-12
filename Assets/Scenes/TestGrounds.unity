@@ -570,6 +570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e3c2c5e7afde44394429b0dc06ea9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hideOnAwake: 1
   joystickKnob: {fileID: 1736725483}
   joystickSlot: {fileID: 933787195}
 --- !u!1 &1209919992
@@ -917,7 +918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8113206, g: 0.8113206, b: 0.8113206, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
