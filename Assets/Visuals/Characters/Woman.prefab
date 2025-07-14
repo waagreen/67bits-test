@@ -1061,6 +1061,7 @@ GameObject:
   - component: {fileID: 4987089433862036534}
   - component: {fileID: 3152432514655056204}
   - component: {fileID: 3071745379190140236}
+  - component: {fileID: -3204221212593473633}
   m_Layer: 0
   m_Name: Woman
   m_TagString: Untagged
@@ -1099,7 +1100,7 @@ Animator:
   m_GameObject: {fileID: 8317843612962762277}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: feb728a4b32e42e40b3eac458be9da0f, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 50e50785aa2905541bf6ac42e1121716, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -1152,6 +1153,18 @@ MonoBehaviour:
   - {fileID: 4562592136644519790}
   - {fileID: 1992171476894211339}
   - {fileID: 7192961688525542092}
+--- !u!114 &-3204221212593473633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8317843612962762277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67438b82cd332ec47a39517eb0e9ab34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8425903695438506829
 GameObject:
   m_ObjectHideFlags: 0

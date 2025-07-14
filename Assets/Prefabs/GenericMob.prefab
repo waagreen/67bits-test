@@ -78,14 +78,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  acceleration: 30
-  rotationSpeed: 180
+  acceleration: 20
+  rotationSpeed: 45
+  lookSmoothTime: 0.1
   skins:
   - {fileID: 2810523112516529058}
   - {fileID: 9132786247283820042}
   - {fileID: 1631854599927400224}
   - {fileID: 5562692832158945578}
-  timeToChangeDirection: 3
+  timeToChangeDirection: 6
 --- !u!136 &5456128973158388654
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -302,6 +302,7 @@ GameObject:
   - component: {fileID: 1015990195139047660}
   - component: {fileID: 6959053676532882838}
   - component: {fileID: 251013671770168641}
+  - component: {fileID: 8771787814395895727}
   m_Layer: 0
   m_Name: Boy
   m_TagString: Untagged
@@ -338,7 +339,7 @@ Animator:
   m_GameObject: {fileID: 4054044970919396095}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 819e1ea1fc3376747aa615ca0114ae76, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 50e50785aa2905541bf6ac42e1121716, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -389,6 +390,18 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 702308531806314876}
   - {fileID: 4774219548148136328}
+--- !u!114 &8771787814395895727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4054044970919396095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67438b82cd332ec47a39517eb0e9ab34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4139436137386016678
 GameObject:
   m_ObjectHideFlags: 0

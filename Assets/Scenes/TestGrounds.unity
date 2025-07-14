@@ -1313,6 +1313,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2474958060975545431, guid: 604b5ca548c836a42be45d419adb74f7, type: 3}
+      propertyPath: maxIdleTime
+      value: 3.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 2474958060975545431, guid: 604b5ca548c836a42be45d419adb74f7, type: 3}
+      propertyPath: minIdleTime
+      value: 1.51
+      objectReference: {fileID: 0}
     - target: {fileID: 3025724067209598667, guid: 604b5ca548c836a42be45d419adb74f7, type: 3}
       propertyPath: m_Name
       value: GenericMob
