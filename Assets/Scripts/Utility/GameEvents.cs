@@ -7,3 +7,5 @@ public class OnPause : GameEvent { }
 public class OnCollect : GameEvent { }
 
 public class OnLevelUp : GameEvent { }
+
+public class OnPunch : GameEvent { }

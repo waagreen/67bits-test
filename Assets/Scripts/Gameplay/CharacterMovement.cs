@@ -4,23 +4,29 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     [SerializeField][Min(0f)] private float speed = 10f, acceleration = 30f, rotationSpeed = 50f;
+    [SerializeField][Range(0f, 1f)] private float lookSmoothTime = 0.1f;
+
+    private CharacterAnimator anim;
 
     protected Rigidbody rb;
-    protected Vector3 velocity = default;
-    protected Vector3 desiredVelocity = default;
-    protected Vector3 direction = default;
+    protected Vector3 velocity = default, desiredVelocity = default, lookVelocity = default;
+    protected Vector3 direction = default, smoothLookDirection = default;
 
     public virtual Vector2 MovementInput { get; set; }
 
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody>();
+        anim = GetComponentInChildren<CharacterAnimator>();
+        smoothLookDirection = transform.forward;
     }
 
     protected virtual void Update()
-    {      
+    {
         direction = new(MovementInput.x, 0f, MovementInput.y);
         desiredVelocity = speed * direction;
+
+        if (anim) anim.Movement = direction;
     }
     
     protected virtual void FixedUpdate()
@@ -31,19 +37,19 @@ public class CharacterMovement : MonoBehaviour
 
     private void HandleRotation()
     {
-        if (direction.sqrMagnitude < 0.001f) return;
+        if (direction.sqrMagnitude < 0.01f) return;
 
-        float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
-
-        Quaternion interpolatedRotation = Quaternion.Slerp
+        smoothLookDirection = Vector3.SmoothDamp
         (
-            rb.rotation,
-            targetRotation,
-            rotationSpeed * Time.deltaTime
+            smoothLookDirection,
+            direction,
+            ref lookVelocity,
+            lookSmoothTime
         );
 
-        rb.MoveRotation(interpolatedRotation);
+        float angle = Mathf.Atan2(smoothLookDirection.x, smoothLookDirection.z) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(0, angle, 0);
+        rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.deltaTime));
     }
 
     private void HandleVelocity()

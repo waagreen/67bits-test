@@ -322,9 +322,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 533238538}
-  cameraOffset: {x: 0, y: 6, z: -6}
+  cameraOffset: {x: 0, y: 4.41, z: -6}
   lookSpeed: 5
-  distance: 3
+  distance: 6
   rotationLag: 0.1
 --- !u!1 &222558370
 GameObject:
@@ -1332,7 +1332,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: rotationSpeed
-      value: 180
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622184541382197292, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+      propertyPath: m_AABB.m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622184541382197292, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+      propertyPath: m_AABB.m_Center.y
+      value: 0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622184541382197292, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5019448047802796280, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5995248372168368796, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+      propertyPath: m_UpdateMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6909737324259726853, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: m_Name
