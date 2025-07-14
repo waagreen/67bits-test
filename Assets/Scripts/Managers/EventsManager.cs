@@ -6,7 +6,7 @@ public static class EventsManager
     private static readonly Dictionary<Type, Action<GameEvent>> activeEvents = new(); // Maps type to event (one-to-many)
     private static readonly Dictionary<Delegate, Action<GameEvent>> actionsLookup = new(); // Maps original delegate to generic type (one-to-one)
 
-    public static void AddSubscriber<T>(Action<GameEvent> evt) where T : GameEvent
+    public static void AddSubscriber<T>(Action<T> evt) where T : GameEvent
     {
         if (actionsLookup.ContainsKey(evt)) return;
 
@@ -28,28 +28,30 @@ public static class EventsManager
         }
     }
 
-    public static void RemoveSubscriber<T>(Action<GameEvent> evt) where T : GameEvent
+    public static void RemoveSubscriber<T>(Action<T> evt) where T : GameEvent
     {
-        if (!actionsLookup.ContainsKey(evt)) return;
-
-        if (activeEvents.TryGetValue(typeof(T), out var existingAction))
+        if (actionsLookup.TryGetValue(evt, out var action))
         {
-            existingAction -= evt;
+            if (activeEvents.TryGetValue(typeof(T), out var existingAction))
+            {
+                existingAction -= action;
 
-            if (existingAction == null)
-            {
-                // If it was the last action subscribed to that event, remove the type from the dictionary
-                activeEvents.Remove(typeof(T));
+                if (existingAction == null)
+                {
+                    // If it was the last action subscribed to that event, remove the type from the dictionary
+                    activeEvents.Remove(typeof(T));
+                }
+                else
+                {
+                    // Otherwise, there are actions still subscribed, so update the dictionary
+                    activeEvents[typeof(T)] = existingAction;
+                }
             }
-            else
-            {
-                // Otherwise, there are actions still subscribed, so update the dictionary
-                activeEvents[typeof(T)] = existingAction;
-            }
+
+            // Remove the action from the events lookup table
+            actionsLookup.Remove(evt);
         }
 
-        // Remove the action from the events lookup table
-        actionsLookup.Remove(evt);
     }
 
     public static void Broadcast(GameEvent evt)

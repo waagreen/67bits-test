@@ -662,6 +662,37 @@ Transform:
   - {fileID: 8708681260444843644}
   m_Father: {fileID: 1857207649479273081}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5669729908781239998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4541175361305463583}
+  m_Layer: 7
+  m_Name: CorpsePilePivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4541175361305463583
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5669729908781239998}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8581338205201424866}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5697757099797289441
 GameObject:
   m_ObjectHideFlags: 0
@@ -984,6 +1015,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5900336809429380886}
+  - {fileID: 4541175361305463583}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &5122326156315012326
@@ -1028,7 +1060,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.7
+  m_Radius: 1.6
   m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!54 &3840559058828006567
 Rigidbody:
@@ -1076,6 +1108,7 @@ MonoBehaviour:
   punchTargetLayer:
     serializedVersion: 2
     m_Bits: 64
+  punchForce: 50
 --- !u!1 &7326446530620338953
 GameObject:
   m_ObjectHideFlags: 0

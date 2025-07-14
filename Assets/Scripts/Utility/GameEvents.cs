@@ -8,4 +8,8 @@ public class OnCollect : GameEvent { }
 
 public class OnLevelUp : GameEvent { }
 
-public class OnPunch : GameEvent { }
+public class OnPunch : GameEvent
+{
+    public float duration;
+    public float magnitude;
+}

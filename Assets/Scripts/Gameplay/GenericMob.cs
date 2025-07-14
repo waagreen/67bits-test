@@ -102,4 +102,10 @@ public class GenericMob : CharacterMovement
         rb.constraints = isConscious ? RigidbodyConstraints.None : RigidbodyConstraints.FreezeAll;
         rb.useGravity = isConscious;
     }
+
+    public void RecievePunch(Vector3 direction, float power)
+    {
+    
+        ragdoll.AddImpulse(direction * power);
+    }
 }

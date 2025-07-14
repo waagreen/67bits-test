@@ -11,11 +11,24 @@ public class HandleRagdoll : MonoBehaviour
         bodies = GetComponentsInChildren<Rigidbody>();
         SetState(enableOnAwake);
     }
+    public void AddImpulse(Vector3 force)
+    {
+        if (bodies == null) return;
+
+        foreach (var body in bodies)
+        {
+            if (body.name.ToLower().Contains("spine"))
+            {
+                body.AddForceAtPosition(force, body.position, ForceMode.Impulse);
+                break;
+            }
+        }
+    }
 
     public void SetState(bool state)
     {
         if (bodies == null) return;
-        
+
         // If the body is kinematic, then we are giving control over to the physics engine
         foreach (Rigidbody body in bodies)
         {
