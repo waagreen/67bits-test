@@ -81,15 +81,16 @@ MonoBehaviour:
   acceleration: 20
   rotationSpeed: 45
   lookSmoothTime: 0.1
+  mainCollider: {fileID: 5456128973158388654}
+  minMoveTime: 2
+  maxMoveTime: 4
+  minIdleTime: 1
+  maxIdleTime: 2
   skins:
   - {fileID: 2810523112516529058}
   - {fileID: 9132786247283820042}
   - {fileID: 1631854599927400224}
   - {fileID: 5562692832158945578}
-  minMoveTime: 2
-  maxMoveTime: 4
-  minIdleTime: 1
-  maxIdleTime: 2
 --- !u!136 &5456128973158388654
 CapsuleCollider:
   m_ObjectHideFlags: 0

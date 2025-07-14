@@ -5,8 +5,8 @@ public class Player : CharacterMovement
     [Header("Player Settings")]
     [SerializeField] private LayerMask punchTargetLayer = -1;
 
-    private InputActions inputs;
     public override Vector2 MovementInput => inputs.Player.Move.ReadValue<Vector2>();
+    private InputActions inputs;
 
     protected override void Start()
     {
@@ -25,6 +25,10 @@ public class Player : CharacterMovement
     {
         if ((punchTargetLayer & (1 << other.gameObject.layer)) == 0) return;
 
-        anim.TriggerPunch();
+        if (other.TryGetComponent(out GenericMob mob))
+        {
+            mob.SetConsciousness(false);
+            anim.TriggerPunch();
+        }
     }
 }

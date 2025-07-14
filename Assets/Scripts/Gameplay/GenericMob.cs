@@ -4,13 +4,13 @@ using UnityEngine;
 public class GenericMob : CharacterMovement
 {
     [Header("Mob settings")]
-    [SerializeField] private LayerMask hurtMask = 0;
+    [SerializeField] private Collider mainCollider;
     [SerializeField][Min(0f)] private float minMoveTime = 2f, maxMoveTime = 4f, minIdleTime = 1f, maxIdleTime = 2f;
     [SerializeField] private List<GameObject> skins;
 
     private GameObject activeSkin = null;
     private HandleRagdoll ragdoll = null;
-    private bool isUnconscious = false;
+    private bool isConscious = true;
     private float movementDelta = 0f, idleDelta = 0f;
     private float movementTime = 0f, idleTime = 0f;
     private Vector2 lastDirection = default;
@@ -19,8 +19,8 @@ public class GenericMob : CharacterMovement
     {
         get
         {
-            if (isUnconscious) return Vector2.zero;
-            else return GetDirection();
+            if (isConscious) return GetDirection();
+            else return Vector2.zero;
         }
     }
 
@@ -85,13 +85,21 @@ public class GenericMob : CharacterMovement
         return lastDirection.normalized;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void SetConsciousness(bool consciousness)
     {
-        if ((hurtMask & (1 << other.gameObject.layer)) == 0) return;
         if ((ragdoll == null) || (anim == null)) return;
 
-        isUnconscious = true;
-        anim.SetAnimatorState(false);
-        ragdoll.SetState(true);
+        isConscious = consciousness;
+
+        // In case of unconsciousness, disable animator and pass body control over to the physics engine
+        anim.SetAnimatorState(isConscious);
+        ragdoll.SetState(!isConscious);
+
+        // In case of unconsciousness, disable collider so the player can't bump on the corpse
+        mainCollider.enabled = isConscious;
+
+        // In case of unconsciousness, restrain rigidbody and disable gravity to prevent flickering
+        rb.constraints = isConscious ? RigidbodyConstraints.None : RigidbodyConstraints.FreezeAll;
+        rb.useGravity = isConscious;
     }
 }

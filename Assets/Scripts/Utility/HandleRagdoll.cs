@@ -15,12 +15,11 @@ public class HandleRagdoll : MonoBehaviour
     public void SetState(bool state)
     {
         if (bodies == null) return;
-
+        
         // If the body is kinematic, then we are giving control over to the physics engine
         foreach (Rigidbody body in bodies)
         {
             body.isKinematic = !state;
-            body.useGravity = state;
             body.excludeLayers = collisionBlacklist;
         }
     }
