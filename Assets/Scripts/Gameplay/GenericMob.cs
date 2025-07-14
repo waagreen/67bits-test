@@ -105,7 +105,6 @@ public class GenericMob : CharacterMovement
 
     public void RecievePunch(Vector3 direction, float power)
     {
-    
         ragdoll.AddImpulse(direction * power);
     }
 }

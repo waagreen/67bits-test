@@ -11,6 +11,7 @@ public class HandleRagdoll : MonoBehaviour
         bodies = GetComponentsInChildren<Rigidbody>();
         SetState(enableOnAwake);
     }
+
     public void AddImpulse(Vector3 force)
     {
         if (bodies == null) return;
@@ -35,5 +36,19 @@ public class HandleRagdoll : MonoBehaviour
             body.isKinematic = !state;
             body.excludeLayers = collisionBlacklist;
         }
+    }
+
+    public Transform GetRootForCarrying()
+    {
+        if (bodies == null) return transform;
+
+        foreach (var body in bodies)
+        {
+            body.isKinematic = false;
+            body.useGravity = false;
+        }
+
+        // Skeleton parent
+        return transform;
     }
 }
