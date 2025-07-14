@@ -23,6 +23,11 @@ public class CharacterAnimator : MonoBehaviour
         animator.SetTrigger(punchHash);
     }
 
+    public void SetAnimatorState(bool state)
+    {
+        animator.enabled = state;
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();

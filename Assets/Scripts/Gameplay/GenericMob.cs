@@ -4,16 +4,25 @@ using UnityEngine;
 public class GenericMob : CharacterMovement
 {
     [Header("Mob settings")]
-    [SerializeField] private List<GameObject> skins;
+    [SerializeField] private LayerMask hurtMask = 0;
     [SerializeField][Min(0f)] private float minMoveTime = 2f, maxMoveTime = 4f, minIdleTime = 1f, maxIdleTime = 2f;
+    [SerializeField] private List<GameObject> skins;
 
     private GameObject activeSkin = null;
-
+    private HandleRagdoll ragdoll = null;
+    private bool isUnconscious = false;
     private float movementDelta = 0f, idleDelta = 0f;
     private float movementTime = 0f, idleTime = 0f;
     private Vector2 lastDirection = default;
 
-    public override Vector2 MovementInput => GetDirection();
+    public override Vector2 MovementInput
+    {
+        get
+        {
+            if (isUnconscious) return Vector2.zero;
+            else return GetDirection();
+        }
+    }
 
     private void OnValidate()
     {
@@ -37,12 +46,20 @@ public class GenericMob : CharacterMovement
     private void OnEnable()
     {
         activeSkin = skins?[Random.Range(0, skins.Count)];
-        if (activeSkin != null) activeSkin.SetActive(true);
+        if (activeSkin != null)
+        {
+            activeSkin.SetActive(true);
+            if (activeSkin.TryGetComponent(out HandleRagdoll obj)) ragdoll = obj;
+        }
     }
 
     private void OnDisable()
     {
-        if (activeSkin != null) activeSkin.SetActive(false);
+        if (activeSkin != null)
+        {
+            activeSkin.SetActive(false);
+            ragdoll = null;
+        }
     }
 
     // Mobs start moving in a random direction for the given movement time
@@ -66,5 +83,15 @@ public class GenericMob : CharacterMovement
             idleDelta = 0f;
         }
         return lastDirection.normalized;
-    } 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if ((hurtMask & (1 << other.gameObject.layer)) == 0) return;
+        if ((ragdoll == null) || (anim == null)) return;
+
+        isUnconscious = true;
+        anim.SetAnimatorState(false);
+        ragdoll.SetState(true);
+    }
 }
