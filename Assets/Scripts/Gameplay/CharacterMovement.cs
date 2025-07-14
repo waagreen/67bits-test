@@ -6,8 +6,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField][Min(0f)] private float speed = 10f, acceleration = 30f, rotationSpeed = 50f;
     [SerializeField][Range(0f, 1f)] private float lookSmoothTime = 0.1f;
 
-    private CharacterAnimator anim;
-
+    protected CharacterAnimator anim;
     protected Rigidbody rb;
     protected Vector3 velocity = default, desiredVelocity = default, lookVelocity = default;
     protected Vector3 direction = default, smoothLookDirection = default;

@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Player : CharacterMovement
 {
+    [Header("Player Settings")]
+    [SerializeField] private LayerMask punchTargetLayer = -1;
+
     private InputActions inputs;
     public override Vector2 MovementInput => inputs.Player.Move.ReadValue<Vector2>();
 
@@ -16,5 +19,12 @@ public class Player : CharacterMovement
     {
         inputs.Disable();
         inputs = null;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if ((punchTargetLayer & (1 << other.gameObject.layer)) == 0) return;
+
+        anim.TriggerPunch();
     }
 }
