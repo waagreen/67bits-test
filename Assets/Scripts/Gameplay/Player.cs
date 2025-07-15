@@ -3,13 +3,15 @@ using UnityEngine;
 
 public class Player : CharacterMovement
 {
-    [Header("Player Settings")]
-    [SerializeField][Min(0)] private int initalCarryingCapacity = 3;
+    [Header("Punch Settings")]
     [SerializeField][Min(0f)] private float punchForce = 50f;
     [SerializeField] private LayerMask punchTargetLayer = -1;
+
+    [Header("Collect Settings")]
     [SerializeField] private LayerMask collectableLayer = 0;
     [SerializeField] private Transform carryPivot = default;
-    [SerializeField][Min(0f)] private float collectCooldown = 0.5f, stackSpacing = 0.6f;
+    [SerializeField][Min(0)] private int initalCarryingCapacity = 3;
+    [SerializeField][Min(0f)] private float collectCooldown = 0.5f, stackSpacing = 0.6f, followDelay = 0.5f;
 
     private List<HandleRagdoll> carriedRagdolls = new();
     private float nextCollectTime = 0f; 
@@ -39,8 +41,8 @@ public class Player : CharacterMovement
         int index = carriedRagdolls.Count;
         Vector3 offset = new(0, index * stackSpacing, 0);
         Quaternion rotation = Quaternion.Euler(Vector3.right * -90f);
-
-        ragdoll.AttachToTarget(carryPivot, offset, rotation);
+        float inertiaFactor = followDelay * Mathf.Pow(index, 1.2f);
+        ragdoll.AttachToTarget(carryPivot, offset, rotation, inertiaFactor);
 
         carriedRagdolls.Add(ragdoll);
     }
