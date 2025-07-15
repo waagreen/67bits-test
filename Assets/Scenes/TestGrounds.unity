@@ -325,6 +325,8 @@ MonoBehaviour:
   cameraOffset: {x: 0, y: 4.41, z: -6}
   lookSpeed: 5
   distance: 6
+  collectDistanceDelta: 0.5
+  distanceDeltaDuration: 1
   rotationLag: 0.1
 --- !u!1 &222558370
 GameObject:
@@ -851,7 +853,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 70, y: 0.25, z: 70}
+  m_LocalScale: {x: 100, y: 0.25, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1697,6 +1699,10 @@ PrefabInstance:
       value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+      propertyPath: stackSpacing
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: rotationSpeed
       value: 45
       objectReference: {fileID: 0}
@@ -1727,6 +1733,10 @@ PrefabInstance:
     - target: {fileID: 5019448047802796280, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122326156315012326, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+      propertyPath: m_Material
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5995248372168368796, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: m_UpdateMode

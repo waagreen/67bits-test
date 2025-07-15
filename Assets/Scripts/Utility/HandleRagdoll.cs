@@ -8,7 +8,7 @@ public class HandleRagdoll : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private bool enableOnAwake = false;
-    [SerializeField] private LayerMask collisionBlacklist = 0;
+    [SerializeField] private LayerMask groundedBlackList = 0, carriedBlackList = 0;
 
     private Vector3 localOffset;
     private Quaternion localRotation;
@@ -23,14 +23,14 @@ public class HandleRagdoll : MonoBehaviour
         {
             Rigidbody body = bodies[i];
             body.isKinematic = !enableOnAwake;
-            body.excludeLayers = collisionBlacklist;
+            body.excludeLayers = groundedBlackList;
         }
     }
 
     void FixedUpdate()
     {
         if (target == null) return;
-
+        
         Vector3 worldTargetPos = target.TransformPoint(localOffset);
         Quaternion worldTargetRot = target.rotation * localRotation;
 
@@ -52,11 +52,30 @@ public class HandleRagdoll : MonoBehaviour
         }
     }
 
-    public void AttachToTarget(Transform target)
+    public void AttachToTarget(Transform target, Vector3 desiredLocalOffset, Quaternion desiredLocalRotation)
     {
         this.target = target;
-        localOffset = target.InverseTransformPoint(anchorBone.position);
-        localRotation = Quaternion.Inverse(target.rotation) * anchorBone.rotation;
+        localOffset = desiredLocalOffset;
+        localRotation = desiredLocalRotation;
+
+        Vector3 worldTargetPos = target.TransformPoint(localOffset);
+        Quaternion worldTargetRot = target.rotation * localRotation;
+
+        Vector3 delta = worldTargetPos - anchorBone.position;
+        Quaternion deltaRot = worldTargetRot * Quaternion.Inverse(anchorBone.rotation);
+
+        foreach (var rb in bodies)
+        {
+            rb.excludeLayers = carriedBlackList;
+            rb.useGravity = false;
+
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            
+            rb.MovePosition(rb.position + delta);
+            rb.MoveRotation(deltaRot * rb.rotation);
+            // rb.isKinematic = true;
+        }
     }
 
     public void AddImpulse(Vector3 force)

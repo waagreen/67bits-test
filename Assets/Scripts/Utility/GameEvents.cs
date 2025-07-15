@@ -4,7 +4,10 @@ public class GameEvent { }
 
 public class OnPause : GameEvent { }
 
-public class OnCollect : GameEvent { }
+public class OnCollect : GameEvent
+{
+    public int amount;
+}
 
 public class OnLevelUp : GameEvent { }
 

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : CharacterMovement
@@ -9,13 +10,11 @@ public class Player : CharacterMovement
     [SerializeField] private LayerMask punchTargetLayer = -1;
     [SerializeField] private LayerMask collectableLayer = 0;
     [SerializeField] private Transform carryPivot = default;
-    [SerializeField][Min(0f)] private float collectCooldown = 0.5f; 
+    [SerializeField][Min(0f)] private float collectCooldown = 0.5f, stackSpacing = 0.6f;
 
+    private List<HandleRagdoll> carriedRagdolls = new();
     private float nextCollectTime = 0f; 
-    private int carryingAmount = 0;
     private int carryingCapacity = 0;
-    private Transform currentCarry = default;
-    private const int kCollectDuration = 2;
 
     public override Vector2 MovementInput => inputs.Player.Move.ReadValue<Vector2>();
     private InputActions inputs;
@@ -36,11 +35,24 @@ public class Player : CharacterMovement
         inputs = null;
     }
 
-    private void Carry()
+    private void Carry(HandleRagdoll ragdoll)
     {
-        var ragdoll = currentCarry.GetComponentInChildren<HandleRagdoll>();
-        if (ragdoll == null) return;
-        ragdoll.AttachToTarget(carryPivot);
+        int index = carriedRagdolls.Count;
+        Vector3 offset = new(0, index * stackSpacing, 0);
+
+        ragdoll.AttachToTarget(carryPivot, offset, Quaternion.Euler(Vector3.right * -90f));
+
+        carriedRagdolls.Add(ragdoll);
+    }
+
+    public void DropAll()
+    {
+        foreach (var ragdoll in carriedRagdolls)
+        {
+            ragdoll.SetRagdollKinematic(false);
+        }
+
+        carriedRagdolls.Clear();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -60,13 +72,16 @@ public class Player : CharacterMovement
         }
         else if ((collectableLayer & (1 << other.gameObject.layer)) != 0)
         {
-            if ((carryingAmount >= carryingCapacity) || (currentCarry != null)) return;
             if (Time.time < nextCollectTime) return;
+            if (carriedRagdolls.Count >= carryingCapacity) return;
 
-            EventsManager.Broadcast(new OnCollect());
-            currentCarry = other.transform.root;
-            Debug.Log("CARRY");
-            Carry();
+            if (other.transform.parent.TryGetComponent(out HandleRagdoll ragdoll) && !carriedRagdolls.Contains(ragdoll))
+            {
+                Carry(ragdoll);
+                nextCollectTime = Time.time + collectCooldown;
+                EventsManager.Broadcast(new OnCollect {amount = 1});
+            }
         }
+
     }
 }
