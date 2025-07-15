@@ -1700,7 +1700,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: stackSpacing
-      value: 1.5
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: rotationSpeed
@@ -1717,6 +1717,10 @@ PrefabInstance:
     - target: {fileID: 3840559058828006567, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: m_UseGravity
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3840559058828006567, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 4622184541382197292, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: m_AABB.m_Center.x

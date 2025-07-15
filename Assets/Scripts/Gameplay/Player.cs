@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,8 +38,9 @@ public class Player : CharacterMovement
     {
         int index = carriedRagdolls.Count;
         Vector3 offset = new(0, index * stackSpacing, 0);
+        Quaternion rotation = Quaternion.Euler(Vector3.right * -90f);
 
-        ragdoll.AttachToTarget(carryPivot, offset, Quaternion.Euler(Vector3.right * -90f));
+        ragdoll.AttachToTarget(carryPivot, offset, rotation);
 
         carriedRagdolls.Add(ragdoll);
     }

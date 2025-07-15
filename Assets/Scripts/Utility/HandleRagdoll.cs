@@ -30,17 +30,28 @@ public class HandleRagdoll : MonoBehaviour
     void FixedUpdate()
     {
         if (target == null) return;
-        
+
         Vector3 worldTargetPos = target.TransformPoint(localOffset);
         Quaternion worldTargetRot = target.rotation * localRotation;
 
         Vector3 delta = worldTargetPos - anchorBone.position;
         Quaternion deltaRot = worldTargetRot * Quaternion.Inverse(anchorBone.rotation);
 
+        Vector3 velocity = delta / Time.fixedDeltaTime;
+
+        // Convert delta rotation to angular velocity
+        deltaRot.ToAngleAxis(out float angle, out Vector3 axis);
+        if (angle > 180f) angle -= 360f;
+
+        Vector3 angularVelocity = angle * Mathf.Deg2Rad * axis.normalized / Time.fixedDeltaTime;
+        angularVelocity = (axis == Vector3.zero) ? Vector3.zero : angularVelocity;
+
         foreach (var rb in bodies)
         {
-            rb.MovePosition(rb.position + delta);
-            rb.MoveRotation(deltaRot * rb.rotation);
+            if (rb.isKinematic) continue; // skip if kinematic (safety check)
+
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, velocity, 0.5f);
+            rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, angularVelocity, 0.5f);
         }
     }
 
@@ -58,24 +69,7 @@ public class HandleRagdoll : MonoBehaviour
         localOffset = desiredLocalOffset;
         localRotation = desiredLocalRotation;
 
-        Vector3 worldTargetPos = target.TransformPoint(localOffset);
-        Quaternion worldTargetRot = target.rotation * localRotation;
-
-        Vector3 delta = worldTargetPos - anchorBone.position;
-        Quaternion deltaRot = worldTargetRot * Quaternion.Inverse(anchorBone.rotation);
-
-        foreach (var rb in bodies)
-        {
-            rb.excludeLayers = carriedBlackList;
-            rb.useGravity = false;
-
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            
-            rb.MovePosition(rb.position + delta);
-            rb.MoveRotation(deltaRot * rb.rotation);
-            // rb.isKinematic = true;
-        }
+        foreach (var rb in bodies) rb.excludeLayers = carriedBlackList;
     }
 
     public void AddImpulse(Vector3 force)
