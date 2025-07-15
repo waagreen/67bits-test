@@ -259,9 +259,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2855973437435223801}
   - {fileID: 7683530335760497903}
   - {fileID: 2459126693494921548}
-  - {fileID: 2855973437435223801}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5679784165162094853
@@ -349,10 +349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aa2bbb4943bcf248b8fcdcf9bbcb55f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ragdollHips: {fileID: 2855973437435223801}
-  enablePhysicsDelay: 0.1
-  positionThreshold: 0.1
-  rotationThreshold: 5
+  anchorBone: {fileID: 2855973437435223801}
   enableOnAwake: 0
   collisionBlacklist:
     serializedVersion: 2
@@ -1865,7 +1862,7 @@ Transform:
   m_GameObject: {fileID: 8422120376607120045}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.79638493, z: 0.003323}
+  m_LocalPosition: {x: 0, y: 0.79638493, z: 0.003323}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

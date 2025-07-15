@@ -40,7 +40,7 @@ public class Player : CharacterMovement
     {
         var ragdoll = currentCarry.GetComponentInChildren<HandleRagdoll>();
         if (ragdoll == null) return;
-        ragdoll.MoveRagdollToTarget(carryPivot);
+        ragdoll.AttachToTarget(carryPivot);
     }
 
     private void OnTriggerEnter(Collider other)
