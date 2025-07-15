@@ -41,6 +41,8 @@ public class GenericMob : CharacterMovement
         // Choose a random direction and a amount of time to move
         lastDirection = new(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
         movementTime = Random.Range(minMoveTime, maxMoveTime);
+
+        EventsManager.AddSubscriber<OnDropCorpse>(RestoreInitialState);
     }
 
     private void OnEnable()
@@ -60,6 +62,21 @@ public class GenericMob : CharacterMovement
             activeSkin.SetActive(false);
             ragdoll = null;
         }
+    }
+
+    private void OnDestroy()
+    {
+        EventsManager.RemoveSubscriber<OnDropCorpse>(RestoreInitialState);
+    }
+
+    private void RestoreInitialState(OnDropCorpse evt)
+    {
+        if (!evt.id.Equals(transform.GetInstanceID())) return;
+
+        // Prepare this object so it can be re-used by the object pooler
+        ragdoll.RestoreInitialState();
+        ToggleMovement(true);
+        gameObject.SetActive(false);
     }
 
     // Mobs start moving in a random direction for the given movement time
@@ -85,22 +102,26 @@ public class GenericMob : CharacterMovement
         return lastDirection.normalized;
     }
 
-    public void SetConsciousness(bool consciousness)
+    private void ToggleMovement(bool state)
+    {
+        // In case of unconsciousness, disable animator and pass body control over to the physics engine
+        anim.SetAnimatorState(state);
+
+        // In case of unconsciousness, disable collider so the player can't bump on the corpse
+        mainCollider.enabled = state;
+
+        // In case of unconsciousness, restrain rigidbody and disable gravity to prevent flickering
+        rb.constraints = state ? RigidbodyConstraints.None : RigidbodyConstraints.FreezeAll;
+        rb.useGravity = state;
+    }
+
+    public void SetUnconscious()
     {
         if ((ragdoll == null) || (anim == null)) return;
 
-        isConscious = consciousness;
-
-        // In case of unconsciousness, disable animator and pass body control over to the physics engine
-        anim.SetAnimatorState(isConscious);
-        ragdoll.SetRagdollKinematic(isConscious);
-
-        // In case of unconsciousness, disable collider so the player can't bump on the corpse
-        mainCollider.enabled = isConscious;
-
-        // In case of unconsciousness, restrain rigidbody and disable gravity to prevent flickering
-        rb.constraints = isConscious ? RigidbodyConstraints.None : RigidbodyConstraints.FreezeAll;
-        rb.useGravity = isConscious;
+        ragdoll.DisableKinematics();
+        ToggleMovement(false);
+        isConscious = false;
     }
 
     public void RecievePunch(Vector3 direction, float power)

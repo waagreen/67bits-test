@@ -8,7 +8,7 @@ public class Player : CharacterMovement
     [SerializeField] private LayerMask punchTargetLayer = -1;
 
     [Header("Collect Settings")]
-    [SerializeField] private LayerMask collectableLayer = 0;
+    [SerializeField] private LayerMask collectableLayer = 0, depositLayer = 0;
     [SerializeField] private Transform carryPivot = default;
     [SerializeField][Min(0)] private int initalCarryingCapacity = 3;
     [SerializeField][Min(0f)] private float collectCooldown = 0.5f, stackSpacing = 0.6f;
@@ -43,18 +43,22 @@ public class Player : CharacterMovement
 
         Vector3 offset = new(0, index * stackSpacing, 0);
 
-        ragdoll.AttachToTarget(carryPivot, offset);
         ragdoll.SetFollowDelay(followDelay, index);
+        ragdoll.AttachToTarget(carryPivot, offset);
 
         carriedRagdolls.Add(ragdoll);
     }
 
-    public void DropAll()
+    public void DropAll(Transform deposit)
     {
-        foreach (var ragdoll in carriedRagdolls)
+        for (int i = 0; i < carriedRagdolls.Count; i++)
         {
-            ragdoll.SetRagdollKinematic(false);
+            HandleRagdoll ragdoll = carriedRagdolls[i];
+            ragdoll.SetFollowDelay(0.2f, i);
+            ragdoll.AttachToTarget(deposit, Vector3.zero, detachOnReachDestination: true);
+            EventsManager.Broadcast(new OnDropCorpse { id = ragdoll.transform.parent.GetInstanceID() });
         }
+
 
         carriedRagdolls.Clear();
     }
@@ -65,7 +69,7 @@ public class Player : CharacterMovement
         {
             if (other.TryGetComponent(out GenericMob mob))
             {
-                mob.SetConsciousness(false);
+                mob.SetUnconscious();
                 anim.TriggerPunch();
                 mob.RecievePunch(transform.forward, punchForce);
 
@@ -81,11 +85,16 @@ public class Player : CharacterMovement
 
             if (other.transform.parent.TryGetComponent(out HandleRagdoll ragdoll) && !carriedRagdolls.Contains(ragdoll))
             {
+                if (!ragdoll.CanBeCollected) return;
+
                 Carry(ragdoll);
                 nextCollectTime = Time.time + collectCooldown;
-                EventsManager.Broadcast(new OnCollect {amount = 1});
+                EventsManager.Broadcast(new OnCollect { amount = 1 });
             }
         }
-
+        else if ((depositLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            DropAll(other.transform);
+        }
     }
 }

@@ -4,12 +4,17 @@ public class GameEvent { }
 
 public class OnPause : GameEvent { }
 
+public class OnLevelUp : GameEvent { }
+
 public class OnCollect : GameEvent
 {
     public int amount;
 }
 
-public class OnLevelUp : GameEvent { }
+public class OnDropCorpse : GameEvent
+{
+    public int id;
+}
 
 public class OnPunch : GameEvent
 {
