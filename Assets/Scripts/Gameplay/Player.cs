@@ -11,7 +11,7 @@ public class Player : CharacterMovement
     [SerializeField] private LayerMask collectableLayer = 0;
     [SerializeField] private Transform carryPivot = default;
     [SerializeField][Min(0)] private int initalCarryingCapacity = 3;
-    [SerializeField][Min(0f)] private float collectCooldown = 0.5f, stackSpacing = 0.6f, followDelay = 0.5f;
+    [SerializeField][Min(0f)] private float collectCooldown = 0.5f, stackSpacing = 0.6f, followDelay = 0.5f, swayAmplitude = 0.1f, swayFrequency = 1.5f;
 
     private List<HandleRagdoll> carriedRagdolls = new();
     private float nextCollectTime = 0f; 
@@ -39,10 +39,12 @@ public class Player : CharacterMovement
     private void Carry(HandleRagdoll ragdoll)
     {
         int index = carriedRagdolls.Count;
+
         Vector3 offset = new(0, index * stackSpacing, 0);
         Quaternion rotation = Quaternion.Euler(Vector3.right * -90f);
-        float inertiaFactor = followDelay * Mathf.Pow(index, 1.2f);
-        ragdoll.AttachToTarget(carryPivot, offset, rotation, inertiaFactor);
+
+        ragdoll.AttachToTarget(carryPivot, offset, rotation);
+        ragdoll.SetFollowDelay(followDelay, index, swayFrequency, swayAmplitude);
 
         carriedRagdolls.Add(ragdoll);
     }
