@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
@@ -10,21 +11,24 @@ public class CameraFollow : MonoBehaviour
     [SerializeField][Range(0f, 1f)] private float rotationLag = 0.1f;
 
     private Vector3 currentVelocity;
+    private float originalDistance;
 
     private void Start()
     {
+        originalDistance = distance;
         EventsManager.AddSubscriber<OnCollect>(UpdateDistance);
+        EventsManager.AddSubscriber<OnXpGain>(ResetDistance);
     }
 
     private void OnDestroy()
     {
         EventsManager.RemoveSubscriber<OnCollect>(UpdateDistance);
+        EventsManager.RemoveSubscriber<OnXpGain>(ResetDistance);
     }
 
-    private IEnumerator DistanceCoroutine(int amount)
+    private IEnumerator DistanceCoroutine(float newDistance)
     {
         float elapsed = 0f;
-        float newDistance = distance + collectDistanceDelta * amount;
 
         while (elapsed < distanceDeltaDuration)
         {
@@ -35,10 +39,17 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
+    private void ResetDistance(OnXpGain evt)
+    {
+        StopAllCoroutines();
+        StartCoroutine(DistanceCoroutine(originalDistance));
+    }
+
     private void UpdateDistance(OnCollect evt)
     {
         StopAllCoroutines();
-        StartCoroutine(DistanceCoroutine(evt.amount));
+        float amount = distance + collectDistanceDelta * evt.amount;
+        StartCoroutine(DistanceCoroutine(amount));
     }
 
     private void LateUpdate()

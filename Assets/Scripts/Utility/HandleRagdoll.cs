@@ -92,7 +92,7 @@ public class HandleRagdoll : MonoBehaviour
                 body.angularVelocity = Vector3.zero;
                 body.excludeLayers = groundedBlackList;
             }
-            EventsManager.Broadcast(new OnDropCorpse { id = transform.parent.GetInstanceID() });
+            EventsManager.Broadcast(new OnDropCorpse { id = transform.parent.GetInstanceID()});
         }
     }
 

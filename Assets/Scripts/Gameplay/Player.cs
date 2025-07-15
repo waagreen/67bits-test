@@ -54,10 +54,11 @@ public class Player : CharacterMovement
         for (int i = 0; i < carriedRagdolls.Count; i++)
         {
             HandleRagdoll ragdoll = carriedRagdolls[i];
-            ragdoll.SetFollowDelay(0.22f, i + 1);
+            ragdoll.SetFollowDelay(0.1f, i + 1);
             ragdoll.AttachToTarget(deposit, Vector3.zero, detachOnReachDestination: true);
         }
 
+        EventsManager.Broadcast(new OnXpGain { amount = carriedRagdolls.Count });
         carriedRagdolls.Clear();
     }
 

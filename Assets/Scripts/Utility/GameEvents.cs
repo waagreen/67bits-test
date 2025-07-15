@@ -6,6 +6,11 @@ public class OnPause : GameEvent { }
 
 public class OnLevelUp : GameEvent { }
 
+public class OnXpGain : GameEvent
+{
+    public int amount;
+}
+
 public class OnCollect : GameEvent
 {
     public int amount;
