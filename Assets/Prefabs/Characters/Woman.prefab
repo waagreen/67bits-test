@@ -2016,6 +2016,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aa2bbb4943bcf248b8fcdcf9bbcb55f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ragdollHips: {fileID: 4814173747206487728}
+  enablePhysicsDelay: 0.1
+  positionThreshold: 0.1
+  rotationThreshold: 5
   enableOnAwake: 0
   collisionBlacklist:
     serializedVersion: 2

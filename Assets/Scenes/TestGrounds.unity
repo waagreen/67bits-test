@@ -1303,6 +1303,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!4 &1571233328 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4541175361305463583, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+  m_PrefabInstance: {fileID: 8427817217061449753}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1729080981
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1684,12 +1689,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+      propertyPath: carryPivot
+      value: 
+      objectReference: {fileID: 1571233328}
+    - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: punchForce
       value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: rotationSpeed
       value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
+      propertyPath: collectCooldown
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: collectableLayer.m_Bits

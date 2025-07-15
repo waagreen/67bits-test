@@ -93,7 +93,7 @@ public class GenericMob : CharacterMovement
 
         // In case of unconsciousness, disable animator and pass body control over to the physics engine
         anim.SetAnimatorState(isConscious);
-        ragdoll.SetState(!isConscious);
+        ragdoll.SetRagdollKinematic(isConscious);
 
         // In case of unconsciousness, disable collider so the player can't bump on the corpse
         mainCollider.enabled = isConscious;

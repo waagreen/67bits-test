@@ -9,7 +9,9 @@ public class Player : CharacterMovement
     [SerializeField] private LayerMask punchTargetLayer = -1;
     [SerializeField] private LayerMask collectableLayer = 0;
     [SerializeField] private Transform carryPivot = default;
+    [SerializeField][Min(0f)] private float collectCooldown = 0.5f; 
 
+    private float nextCollectTime = 0f; 
     private int carryingAmount = 0;
     private int carryingCapacity = 0;
     private Transform currentCarry = default;
@@ -34,36 +36,11 @@ public class Player : CharacterMovement
         inputs = null;
     }
 
-    private IEnumerator CarryCoroutine()
-    {
-        HandleRagdoll ragdoll = currentCarry.GetComponentInChildren<HandleRagdoll>();
-        if (ragdoll == null) yield break;
-
-        Transform ragdollRoot = ragdoll.GetRootForCarrying();
-
-        float elapsed = 0f;
-        while (elapsed < kCollectDuration)
-        {
-            float delta = Time.deltaTime;
-            elapsed += delta;
-
-            Vector3 newPosition = Vector3.MoveTowards(ragdollRoot.position, carryPivot.position, delta * 5f);
-            ragdollRoot.position = newPosition;
-
-            yield return null;
-        }
-
-        ragdollRoot.SetParent(carryPivot);
-        ragdollRoot.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-        currentCarry = null;
-        carryingAmount++;
-    }
-
-
     private void Carry()
     {
-        StopAllCoroutines();
-        StartCoroutine(CarryCoroutine());
+        var ragdoll = currentCarry.GetComponentInChildren<HandleRagdoll>();
+        if (ragdoll == null) return;
+        ragdoll.MoveRagdollToTarget(carryPivot);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -76,17 +53,15 @@ public class Player : CharacterMovement
                 anim.TriggerPunch();
                 mob.RecievePunch(transform.forward, punchForce);
 
-                OnPunch punchEvt = new()
-                {
-                    duration = 0.1f,
-                    magnitude = 0.22f
-                };
-                EventsManager.Broadcast(punchEvt);
+                nextCollectTime = Time.time + collectCooldown;
+
+                EventsManager.Broadcast(new OnPunch { duration = 0.1f, magnitude = 0.22f });
             }
         }
         else if ((collectableLayer & (1 << other.gameObject.layer)) != 0)
         {
             if ((carryingAmount >= carryingCapacity) || (currentCarry != null)) return;
+            if (Time.time < nextCollectTime) return;
 
             EventsManager.Broadcast(new OnCollect());
             currentCarry = other.transform.root;
