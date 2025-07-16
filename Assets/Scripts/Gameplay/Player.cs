@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : CharacterMovement
@@ -51,6 +52,8 @@ public class Player : CharacterMovement
 
     public void DropAll(Transform deposit)
     {
+        if ((carriedRagdolls == null) || (carriedRagdolls.Count < 1)) return;
+        
         for (int i = 0; i < carriedRagdolls.Count; i++)
         {
             HandleRagdoll ragdoll = carriedRagdolls[i];
@@ -58,6 +61,7 @@ public class Player : CharacterMovement
             ragdoll.AttachToTarget(deposit, Vector3.zero, detachOnReachDestination: true);
         }
 
+        Debug.Log("DROP ALL");
         EventsManager.Broadcast(new OnXpGain { amount = carriedRagdolls.Count });
         carriedRagdolls.Clear();
     }

@@ -6,36 +6,38 @@ using UnityEngine.UI;
 
 public class ExperienceDisplay : MonoBehaviour
 {
-    [SerializeField] private TMP_Text levelText;
-    [SerializeField] private Image experienceFill;
+    [SerializeField] private TMP_Text experienceText;
+    [SerializeField] private Image levelFill;
     [SerializeField] private float timeToFill = 1f, timeToCount = 1f;
 
     private void Start()
     {
-        EventsManager.AddSubscriber<OnXpGain>(UpdateLevel);
+        EventsManager.AddSubscriber<OnXpGain>(UpdateExperience);
     }
 
     private void OnDestroy()
     {
-        EventsManager.RemoveSubscriber<OnXpGain>(UpdateLevel);
+        EventsManager.RemoveSubscriber<OnXpGain>(UpdateExperience);
     }
 
-    private IEnumerator LevelRoutine(int experience)
+    private IEnumerator ExperienceRoutine(int experience)
     {
-        float elapsed = 0f;
-        int xpDelta = 0;
-        while (elapsed < timeToCount)
-        {
-            levelText.SetText(Math.Max(xpDelta++, experience).ToString());
+        int xpDelta = 1;
+        float elapsed = 0;
+        float time = timeToCount * experience;
 
-            elapsed += Time.deltaTime;
-            yield return null;
+        while (elapsed < time)
+        {
+            experienceText.SetText(Math.Min(xpDelta++, experience).ToString());
+            elapsed += timeToCount;
+
+            yield return new WaitForSeconds(timeToCount);
         }
     }
 
-    private void UpdateLevel(OnXpGain evt)
+    private void UpdateExperience(OnXpGain evt)
     {
         StopAllCoroutines();
-        StartCoroutine(LevelRoutine(evt.amount));
+        StartCoroutine(ExperienceRoutine(evt.amount));
     }
 }
