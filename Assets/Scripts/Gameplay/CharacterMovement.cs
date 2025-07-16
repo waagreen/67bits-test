@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class CharacterMovement : MonoBehaviour
 {
-    [SerializeField][Min(0f)] private float speed = 10f, acceleration = 30f, rotationSpeed = 50f;
+    [SerializeField][Min(0f)] protected float speed = 10f, acceleration = 30f, rotationSpeed = 50f;
     [SerializeField][Range(0f, 1f)] private float lookSmoothTime = 0.1f;
 
     protected CharacterAnimator anim;

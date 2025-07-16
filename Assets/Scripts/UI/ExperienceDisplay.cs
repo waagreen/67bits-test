@@ -12,32 +12,33 @@ public class ExperienceDisplay : MonoBehaviour
 
     private void Start()
     {
-        EventsManager.AddSubscriber<OnXpGain>(UpdateExperience);
+        EventsManager.AddSubscriber<OnExperienceChange>(UpdateExperience);
     }
 
     private void OnDestroy()
     {
-        EventsManager.RemoveSubscriber<OnXpGain>(UpdateExperience);
+        EventsManager.RemoveSubscriber<OnExperienceChange>(UpdateExperience);
     }
 
-    private IEnumerator ExperienceRoutine(int experience)
+    private IEnumerator ExperienceRoutine(OnExperienceChange evt)
     {
-        int xpDelta = 1;
         float elapsed = 0;
-        float time = timeToCount * experience;
+        float totalTime = timeToCount * Mathf.Abs(evt.delta);
+        int experience = evt.previous;
 
-        while (elapsed < time)
+        while (elapsed < totalTime)
         {
-            experienceText.SetText(Math.Min(xpDelta++, experience).ToString());
+            experience += evt.delta > 0 ? 1 : -1;
+            experienceText.SetText(experience.ToString());
             elapsed += timeToCount;
 
             yield return new WaitForSeconds(timeToCount);
         }
     }
 
-    private void UpdateExperience(OnXpGain evt)
+    private void UpdateExperience(OnExperienceChange evt)
     {
         StopAllCoroutines();
-        StartCoroutine(ExperienceRoutine(evt.amount));
+        StartCoroutine(ExperienceRoutine(evt));
     }
 }

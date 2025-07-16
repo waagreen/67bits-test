@@ -17,13 +17,13 @@ public class CameraFollow : MonoBehaviour
     {
         originalDistance = distance;
         EventsManager.AddSubscriber<OnCollect>(UpdateDistance);
-        EventsManager.AddSubscriber<OnXpGain>(ResetDistance);
+        EventsManager.AddSubscriber<OnExperienceChange>(ResetDistance);
     }
 
     private void OnDestroy()
     {
         EventsManager.RemoveSubscriber<OnCollect>(UpdateDistance);
-        EventsManager.RemoveSubscriber<OnXpGain>(ResetDistance);
+        EventsManager.RemoveSubscriber<OnExperienceChange>(ResetDistance);
     }
 
     private IEnumerator DistanceCoroutine(float newDistance)
@@ -39,7 +39,7 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
-    private void ResetDistance(OnXpGain evt)
+    private void ResetDistance(OnExperienceChange evt)
     {
         StopAllCoroutines();
         StartCoroutine(DistanceCoroutine(originalDistance));

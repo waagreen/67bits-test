@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : CharacterMovement
@@ -9,33 +8,41 @@ public class Player : CharacterMovement
     [SerializeField] private LayerMask punchTargetLayer = -1;
 
     [Header("Collect Settings")]
-    [SerializeField] private LayerMask collectableLayer = 0, depositLayer = 0;
     [SerializeField] private Transform carryPivot = default;
-    [SerializeField][Min(0)] private int initalCarryingCapacity = 3;
     [SerializeField][Min(0f)] private float collectCooldown = 0.5f, stackSpacing = 0.6f;
     [SerializeField][Min(0f)] private float followDelay = 0.5f;
 
+    [Header("Collision Masks")]
+    [SerializeField] private LayerMask storeLayer = 0;
+    [SerializeField] private LayerMask collectableLayer = 0, depositLayer = 0;
+
+    private InputActions inputs;
     private List<HandleRagdoll> carriedRagdolls = new();
     private float nextCollectTime = 0f; 
-    private int carryingCapacity = 0;
+    private int strength;
 
     public override Vector2 MovementInput => inputs.Player.Move.ReadValue<Vector2>();
-    private InputActions inputs;
 
-    protected override void Start()
+    private void Awake()
     {
-        base.Start();
-
         inputs = new();
         inputs.Enable();
 
-        carryingCapacity = initalCarryingCapacity;
+        EventsManager.AddSubscriber<OnLevelUp>(UpdateStats);
     }
 
     private void OnDestroy()
     {
+        EventsManager.RemoveSubscriber<OnLevelUp>(UpdateStats);
+
         inputs.Disable();
         inputs = null;
+    }
+
+    private void UpdateStats(OnLevelUp evt)
+    {
+        strength = evt.strength;
+        speed = evt.speed;
     }
 
     private void Carry(HandleRagdoll ragdoll)
@@ -53,7 +60,7 @@ public class Player : CharacterMovement
     public void DropAll(Transform deposit)
     {
         if ((carriedRagdolls == null) || (carriedRagdolls.Count < 1)) return;
-        
+
         for (int i = 0; i < carriedRagdolls.Count; i++)
         {
             HandleRagdoll ragdoll = carriedRagdolls[i];
@@ -61,8 +68,12 @@ public class Player : CharacterMovement
             ragdoll.AttachToTarget(deposit, Vector3.zero, detachOnReachDestination: true);
         }
 
-        Debug.Log("DROP ALL");
-        EventsManager.Broadcast(new OnXpGain { amount = carriedRagdolls.Count });
+        // Reward experience for mob corpses
+        EventsManager.Broadcast(new OnExperienceChange
+        {
+            delta = carriedRagdolls.Count,
+            previous = PlayerProfile.Experience
+        });
         carriedRagdolls.Clear();
     }
 
@@ -84,7 +95,7 @@ public class Player : CharacterMovement
         else if ((collectableLayer & (1 << other.gameObject.layer)) != 0)
         {
             if (Time.time < nextCollectTime) return;
-            if (carriedRagdolls.Count >= carryingCapacity) return;
+            if (carriedRagdolls.Count >= strength) return;
 
             if (other.transform.parent.TryGetComponent(out HandleRagdoll ragdoll) && !carriedRagdolls.Contains(ragdoll))
             {
@@ -98,6 +109,10 @@ public class Player : CharacterMovement
         else if ((depositLayer & (1 << other.gameObject.layer)) != 0)
         {
             DropAll(other.transform);
+        }
+        else if ((storeLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            EventsManager.Broadcast(new OnStoreInteraction());
         }
     }
 }
