@@ -56,8 +56,15 @@ public class PlayerProfile : MonoBehaviour
                 break;
         }
 
-        EventsManager.Broadcast(new OnLevelUp { strength = currentStrength, speed = currentSpeed });   
+        EventsManager.Broadcast(new OnLevelUp { strength = currentStrength, speed = currentSpeed });
         EventsManager.Broadcast(new OnExperienceChange { previous = currentExperience, delta = -evt.cost });
         currentExperience = Mathf.Max(0, currentExperience - evt.cost);
+    }
+
+    private void CleanupStaticData()
+    {
+        currentExperience = 0;
+        speedLevel = 0;
+        strengthLevel = 0;   
     }
 }

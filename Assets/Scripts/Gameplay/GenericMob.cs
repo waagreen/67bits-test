@@ -5,6 +5,7 @@ public class GenericMob : CharacterMovement
 {
     [Header("Mob settings")]
     [SerializeField] private Collider mainCollider;
+    [SerializeField] private LayerMask obstacleLayer = 0;
     [SerializeField][Min(0f)] private float minMoveTime = 2f, maxMoveTime = 4f, minIdleTime = 1f, maxIdleTime = 2f;
     [SerializeField] private List<GameObject> skins;
 
@@ -127,5 +128,23 @@ public class GenericMob : CharacterMovement
     public void RecievePunch(Vector3 direction, float power)
     {
         ragdoll.AddImpulse(direction * power);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if ((obstacleLayer & (1 << collision.gameObject.layer)) == 0) return;
+
+        // Bounce of obstacles
+        Vector3 newDirection = Vector3.zero;
+
+        for (int i = 0; i < collision.contactCount; i++)
+        {
+            newDirection += collision.GetContact(i).normal;
+        }
+
+        if (Mathf.Abs(newDirection.x) < 0.01f) newDirection.x = Random.Range(-0.5f, 0.5f);
+        if (Mathf.Abs(newDirection.z) < 0.01f) newDirection.z = Random.Range(-0.5f, 0.5f);
+
+        direction = newDirection.normalized;
     }
 }

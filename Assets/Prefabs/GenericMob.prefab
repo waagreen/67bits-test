@@ -82,6 +82,9 @@ MonoBehaviour:
   rotationSpeed: 45
   lookSmoothTime: 0.1
   mainCollider: {fileID: 5456128973158388654}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 2112
   minMoveTime: 2
   maxMoveTime: 4
   minIdleTime: 1

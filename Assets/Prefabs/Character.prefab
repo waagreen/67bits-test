@@ -896,6 +896,7 @@ GameObject:
   - component: {fileID: 265815934242999815}
   - component: {fileID: 3840559058828006567}
   - component: {fileID: 1845580210731362746}
+  - component: {fileID: 396757616878154744}
   m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
@@ -1011,16 +1012,43 @@ MonoBehaviour:
   punchTargetLayer:
     serializedVersion: 2
     m_Bits: 64
+  carryPivot: {fileID: 4541175361305463583}
+  collectCooldown: 0.5
+  stackSpacing: 0.6
+  followDelay: 0.5
+  storeLayer:
+    serializedVersion: 2
+    m_Bits: 0
   collectableLayer:
     serializedVersion: 2
     m_Bits: 0
   depositLayer:
     serializedVersion: 2
     m_Bits: 0
-  carryPivot: {fileID: 4541175361305463583}
-  collectCooldown: 0.5
-  stackSpacing: 0.6
-  followDelay: 0.5
+--- !u!114 &396757616878154744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6909737324259726853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c554bccfba4c24093e81c3e453f5f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - {r: 0.98816687, g: 1, b: 0.33018857, a: 1}
+  - {r: 1, g: 0.72268105, b: 0.17452818, a: 1}
+  - {r: 1, g: 0.35644802, b: 0.2924527, a: 1}
+  - {r: 0.8254715, g: 0.120705634, b: 0.3846289, a: 1}
+  - {r: 0.8066036, g: 0, b: 0.66741514, a: 1}
+  - {r: 0.57277584, g: 0.22071898, b: 0.7547169, a: 1}
+  - {r: 0.34772283, g: 0.15879746, b: 0.8632074, a: 1}
+  - {r: 0.2641508, g: 0.37335244, b: 1, a: 1}
+  - {r: 0.2358489, g: 0.86068135, b: 1, a: 1}
+  - {r: 0, g: 1, b: 0.67116046, a: 1}
+  targetRenderer: {fileID: 4622184541382197292}
 --- !u!1 &7326446530620338953
 GameObject:
   m_ObjectHideFlags: 0
