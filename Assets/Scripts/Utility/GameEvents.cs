@@ -8,6 +8,14 @@ public class OnEndGame : GameEvent { }
 
 public class OnStoreInteraction : GameEvent { }
 
+public class OnSkillUpgrade : GameEvent
+{
+    public SkillType type;
+    public int value;
+    public int cost;
+}
+
+
 public class OnLevelUp : GameEvent
 {
     public int strength;

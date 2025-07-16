@@ -7,8 +7,7 @@ using UnityEngine.UI;
 public class ExperienceDisplay : MonoBehaviour
 {
     [SerializeField] private TMP_Text experienceText;
-    [SerializeField] private Image levelFill;
-    [SerializeField] private float timeToFill = 1f, timeToCount = 1f;
+    [SerializeField] private float timeToCount = 1f;
 
     private void Start()
     {
