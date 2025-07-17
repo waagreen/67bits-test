@@ -46,7 +46,7 @@ public class HandleRagdoll : MonoBehaviour
 
             body.isKinematic = !enableOnAwake;
             body.excludeLayers = groundedBlackList;
-            body.interpolation = RigidbodyInterpolation.Interpolate;
+            body.interpolation = RigidbodyInterpolation.None;
         }
     }
 
@@ -89,6 +89,7 @@ public class HandleRagdoll : MonoBehaviour
 
             foreach (var body in bodies)
             {
+                body.interpolation = RigidbodyInterpolation.None;
                 body.linearVelocity = Vector3.zero;
                 body.angularVelocity = Vector3.zero;
                 body.excludeLayers = groundedBlackList;
@@ -140,7 +141,11 @@ public class HandleRagdoll : MonoBehaviour
         this.localOffset = localOffset;
         this.detachOnReachDestination = detachOnReachDestination;
 
-        foreach (var rb in bodies) rb.excludeLayers = carriedBlackList;
+        foreach (var rb in bodies)
+        {
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
+            rb.excludeLayers = carriedBlackList;
+        }
 
         // Initializing position and velocity
         smoothedPosition = anchorBone.position;
