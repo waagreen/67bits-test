@@ -81,14 +81,15 @@ MonoBehaviour:
   acceleration: 20
   rotationSpeed: 45
   lookSmoothTime: 0.1
+  stepSounds: {fileID: 0}
   mainCollider: {fileID: 5456128973158388654}
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 2112
   minMoveTime: 2
-  maxMoveTime: 4
-  minIdleTime: 1
-  maxIdleTime: 2
+  maxMoveTime: 5
+  minIdleTime: 0.5
+  maxIdleTime: 3.5
   collisionCooldown: 0.5
   skins:
   - {fileID: 8769703126096709937}

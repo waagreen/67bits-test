@@ -5,11 +5,13 @@ public class CharacterMovement : MonoBehaviour
 {
     [SerializeField][Min(0f)] protected float speed = 10f, acceleration = 30f, rotationSpeed = 50f;
     [SerializeField][Range(0f, 1f)] private float lookSmoothTime = 0.1f;
+    [SerializeField] private RandomSoundPlayer stepSounds;
 
     protected Rigidbody rb;
     protected CharacterAnimator anim;
     protected Vector3 velocity, desiredVelocity, lookVelocity, direction, smoothLookDirection;
     protected Vector2 movementInput;
+
 
     protected virtual void Start()
     {
@@ -24,7 +26,7 @@ public class CharacterMovement : MonoBehaviour
 
         bool hasValue = direction.HasMeaningfulValue();
 
-        desiredVelocity = hasValue ? speed * direction : Vector3.zero; 
+        desiredVelocity = hasValue ? speed * direction : Vector3.zero;
         if (anim) anim.Movement = hasValue ? direction : Vector2.zero;
     }
 
@@ -34,6 +36,7 @@ public class CharacterMovement : MonoBehaviour
         {
             HandleRotation();
             HandleVelocity();
+            if (stepSounds != null) stepSounds.Play(); 
         }
         else
         {

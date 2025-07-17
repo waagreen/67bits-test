@@ -20,7 +20,7 @@ public class MobSpawner : MonoBehaviour
 
     private void Awake()
     {
-        bodyGoal = initalAmount;
+        bodyGoal = totalAmount;
         EventsManager.AddSubscriber<OnDropCorpse>(UpdateBodyCount);
     }
 
@@ -67,13 +67,14 @@ public class MobSpawner : MonoBehaviour
     private void UpdateBodyCount(OnDropCorpse evt)
     {
         bodyCount = Mathf.Min(bodyGoal, bodyCount + 1);
+        Debug.Log("Body count " + bodyCount + ". Body goal: " + bodyGoal);
         CheckGameStatus();
     }
 
     private void CheckGameStatus()
     {
         if (bodyCount < bodyGoal) return;
-
+        Debug.Log("GameEnd");
         EventsManager.Broadcast(new OnEndGame());
     }
 

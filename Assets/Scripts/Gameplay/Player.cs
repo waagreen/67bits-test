@@ -6,6 +6,7 @@ public class Player : CharacterMovement
     [Header("Punch Settings")]
     [SerializeField][Min(0f)] private float punchForce = 50f;
     [SerializeField] private LayerMask punchTargetLayer = -1;
+    [SerializeField] private AudioSource punchSound;
 
     [Header("Collect Settings")]
     [SerializeField] private Transform carryPivot = default;
@@ -93,6 +94,7 @@ public class Player : CharacterMovement
 
                 nextCollectTime = Time.time + collectCooldown;
 
+                punchSound.Play();
                 EventsManager.Broadcast(new OnPunch { duration = 0.1f, magnitude = 0.22f });
             }
         }
