@@ -10,14 +10,16 @@ public class CameraFollow : MonoBehaviour
     [SerializeField][Min(0f)] private float lookSpeed = 5f, distance = 1f, collectDistanceDelta = 0.5f, distanceDeltaDuration = 1f;
     [SerializeField][Range(0f, 1f)] private float rotationLag = 0.1f;
 
-    private Vector3 currentVelocity;
+    private Vector3 currentVelocity, lastTargetPosition;
     private float originalDistance;
 
     private void Awake()
     {
-        originalDistance = distance;
         EventsManager.AddSubscriber<OnCollect>(UpdateDistance);
         EventsManager.AddSubscriber<OnExperienceChange>(ResetDistance);
+
+        originalDistance = distance;
+        lastTargetPosition = target.position;
     }
 
     private void OnDestroy()
@@ -28,8 +30,7 @@ public class CameraFollow : MonoBehaviour
 
     private IEnumerator DistanceCoroutine(float newDistance)
     {
-        float startDistance = distance;
-        float elapsed = 0f;
+        float startDistance = distance, elapsed = 0f;
 
         while (elapsed < distanceDeltaDuration)
         {
@@ -61,6 +62,10 @@ public class CameraFollow : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (target == null) return;
+        if ((target.position - lastTargetPosition).sqrMagnitude < 0.0001f) return; // Skip calculating position if there was no meaninful difference
+        lastTargetPosition = target.position;
+
         // Offset always oriented on world axis
         Vector3 basePosition = target.position + cameraOffset;
         Vector3 desiredPosition = basePosition - transform.forward * distance;
