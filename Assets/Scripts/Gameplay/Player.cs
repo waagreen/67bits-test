@@ -17,7 +17,7 @@ public class Player : CharacterMovement
     [SerializeField] private LayerMask collectableLayer = 0, depositLayer = 0;
 
     private InputActions inputs;
-    private List<HandleRagdoll> carriedRagdolls = new();
+    private readonly List<HandleRagdoll> carriedRagdolls = new();
     private float nextCollectTime = 0f; 
     private int strength;
 

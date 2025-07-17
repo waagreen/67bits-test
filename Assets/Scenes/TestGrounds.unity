@@ -2983,7 +2983,7 @@ PrefabInstance:
       objectReference: {fileID: 1571233328}
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: punchForce
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: followDelay

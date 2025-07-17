@@ -46,6 +46,7 @@ public class HandleRagdoll : MonoBehaviour
 
             body.isKinematic = !enableOnAwake;
             body.excludeLayers = groundedBlackList;
+            body.interpolation = RigidbodyInterpolation.Interpolate;
         }
     }
 
@@ -154,7 +155,7 @@ public class HandleRagdoll : MonoBehaviour
         {
             if (body.name.ToLower().Contains("spine"))
             {
-                body.AddForceAtPosition(force, body.position, ForceMode.Impulse);
+                body.AddForceAtPosition(force, body.position, ForceMode.VelocityChange);
                 break;
             }
         }
