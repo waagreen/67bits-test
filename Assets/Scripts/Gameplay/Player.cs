@@ -12,6 +12,7 @@ public class Player : CharacterMovement
     [SerializeField] private Transform carryPivot = default;
     [SerializeField][Min(0f)] private float collectCooldown = 0.5f, stackSpacing = 0.6f;
     [SerializeField][Min(0f)] private float followDelay = 0.5f;
+    [SerializeField] private AudioSource collectSound;
 
     [Header("Collision Masks")]
     [SerializeField] private LayerMask storeLayer = 0;
@@ -109,6 +110,7 @@ public class Player : CharacterMovement
 
                 Carry(ragdoll);
                 nextCollectTime = Time.time + collectCooldown;
+                collectSound.Play();
                 EventsManager.Broadcast(new OnCollect { amount = 1 });
             }
         }
