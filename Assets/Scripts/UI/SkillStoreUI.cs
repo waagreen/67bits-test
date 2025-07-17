@@ -9,7 +9,7 @@ public class SkillStoreUI : MonoBehaviour
     [SerializeField] private Button closeButton;
     [SerializeField] private SkillButton speedButton, strengthButton;
 
-    private void Start()
+    private void Awake()
     {
         closeButton.onClick.AddListener(CloseStore);
         EventsManager.AddSubscriber<OnStoreInteraction>(OpenStore);

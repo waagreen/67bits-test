@@ -13,6 +13,12 @@ public class PlayerProfile : MonoBehaviour
     public static int SpeedLevel => speedLevel;
     public static int StrengthLevel => strengthLevel;
 
+    private void Awake()
+    {
+        EventsManager.AddSubscriber<OnExperienceChange>(UpdateExperience);
+        EventsManager.AddSubscriber<OnSkillUpgrade>(UpdateSkillLevel);
+    }
+
     private void Start()
     {
         currentExperience = defaultExperience;
@@ -26,9 +32,6 @@ public class PlayerProfile : MonoBehaviour
             speed = currentSpeed,
             strength = currentStrength
         });
-
-        EventsManager.AddSubscriber<OnExperienceChange>(UpdateExperience);
-        EventsManager.AddSubscriber<OnSkillUpgrade>(UpdateSkillLevel);
     }
 
     private void OnDestroy()
@@ -39,7 +42,7 @@ public class PlayerProfile : MonoBehaviour
 
     private void UpdateExperience(OnExperienceChange evt)
     {
-        currentExperience += evt.delta;
+        currentExperience = Mathf.Max(0, currentExperience + evt.delta) ;
     }
 
     private void UpdateSkillLevel(OnSkillUpgrade evt)
@@ -58,7 +61,6 @@ public class PlayerProfile : MonoBehaviour
 
         EventsManager.Broadcast(new OnLevelUp { strength = currentStrength, speed = currentSpeed });
         EventsManager.Broadcast(new OnExperienceChange { previous = currentExperience, delta = -evt.cost });
-        currentExperience = Mathf.Max(0, currentExperience - evt.cost);
     }
 
     private void CleanupStaticData()

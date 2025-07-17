@@ -1145,6 +1145,7 @@ GameObject:
   - component: {fileID: 712509227120808554}
   - component: {fileID: 412523386874308868}
   - component: {fileID: 1225810926086263776}
+  - component: {fileID: 8744562313913813070}
   m_Layer: 8
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -1218,6 +1219,27 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &8744562313913813070
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6530292252684670526}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.2
+  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!1 &7691763629865306506
 GameObject:
   m_ObjectHideFlags: 0

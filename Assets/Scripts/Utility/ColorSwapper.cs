@@ -12,7 +12,7 @@ public class ColorSwapper : MonoBehaviour
         targetRenderer.material.color = colors[colorIndex];
     }
 
-    private void Start()
+    private void Awake()
     {
         EventsManager.AddSubscriber<OnLevelUp>(SwapColor);
     }

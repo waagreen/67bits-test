@@ -5,7 +5,7 @@ public class CameraShake : MonoBehaviour
 {
     private Vector3 originalPos;
 
-    private void Start()
+    private void Awake()
     {
         originalPos = transform.localPosition;
         EventsManager.AddSubscriber<OnPunch>(Shake);

@@ -13,7 +13,7 @@ public class CameraFollow : MonoBehaviour
     private Vector3 currentVelocity;
     private float originalDistance;
 
-    private void Start()
+    private void Awake()
     {
         originalDistance = distance;
         EventsManager.AddSubscriber<OnCollect>(UpdateDistance);

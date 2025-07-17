@@ -34,16 +34,20 @@ public class GenericMob : CharacterMovement
         minMoveTime = Mathf.Min(minMoveTime, maxMoveTime);
     }
 
+    private void Awake()
+    {
+        OnValidate();
+        
+        EventsManager.AddSubscriber<OnDropCorpse>(RestoreInitialState);
+    }
+
     protected override void Start()
     {
         base.Start();
-        OnValidate();
 
         // Choose a random direction and a amount of time to move
         lastDirection = new(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
         movementTime = Random.Range(minMoveTime, maxMoveTime);
-
-        EventsManager.AddSubscriber<OnDropCorpse>(RestoreInitialState);
     }
 
     private void OnEnable()

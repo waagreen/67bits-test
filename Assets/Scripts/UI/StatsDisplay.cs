@@ -11,7 +11,7 @@ public class StatsDisplay : MonoBehaviour
         strengthDisplay.SetText($"Strength {evt.strength}");
     }
 
-    private void Start()
+    private void Awake()
     {
         EventsManager.AddSubscriber<OnLevelUp>(UpdateDisplay);
     }
