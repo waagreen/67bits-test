@@ -68,7 +68,6 @@ public class Player : CharacterMovement
             ragdoll.AttachToTarget(deposit, Vector3.zero, detachOnReachDestination: true);
         }
 
-        Debug.Log($"Dropping {carriedRagdolls.Count} bodies with {PlayerProfile.Experience} of exp");
         // Reward experience for mob corpses
         EventsManager.Broadcast(new OnExperienceChange
         {

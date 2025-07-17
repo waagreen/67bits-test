@@ -467,7 +467,7 @@ MonoBehaviour:
   cameraOffset: {x: 0, y: 4.41, z: -6}
   lookSpeed: 5
   distance: 6
-  collectDistanceDelta: 0.8
+  collectDistanceDelta: 0.5
   distanceDeltaDuration: 0.5
   rotationLag: 0.1
 --- !u!1 &222558370
@@ -2983,7 +2983,7 @@ PrefabInstance:
       objectReference: {fileID: 1571233328}
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: punchForce
-      value: 150
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1845580210731362746, guid: 88c17c1ddadc8ba43af5ff132ef30ab0, type: 3}
       propertyPath: followDelay

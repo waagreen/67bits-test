@@ -28,19 +28,26 @@ public class CameraFollow : MonoBehaviour
 
     private IEnumerator DistanceCoroutine(float newDistance)
     {
+        float startDistance = distance;
         float elapsed = 0f;
 
         while (elapsed < distanceDeltaDuration)
         {
-            float delta = Time.deltaTime;
-            distance = Mathf.Lerp(distance, newDistance, delta);
-            elapsed += delta;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / distanceDeltaDuration);
+            distance = Mathf.Lerp(startDistance, newDistance, t);
             yield return null;
         }
+
+        // Ensures the final value is exact
+        distance = newDistance;
     }
 
     private void ResetDistance(OnExperienceChange evt)
     {
+        // Only reset distance if you are gaining XP
+        if (evt.delta < 1) return;
+
         StopAllCoroutines();
         StartCoroutine(DistanceCoroutine(originalDistance));
     }
