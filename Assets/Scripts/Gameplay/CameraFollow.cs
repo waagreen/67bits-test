@@ -63,7 +63,7 @@ public class CameraFollow : MonoBehaviour
     private void LateUpdate()
     {
         if (target == null) return;
-        if ((target.position - lastTargetPosition).sqrMagnitude < 0.0001f) return; // Skip calculating position if there was no meaninful difference
+        if ((target.position - lastTargetPosition).sqrMagnitude < VectorExtentions.kEpsilon) return; // Skip calculating position if there was no meaninful difference
         lastTargetPosition = target.position;
 
         // Offset always oriented on world axis

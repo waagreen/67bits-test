@@ -89,6 +89,7 @@ MonoBehaviour:
   maxMoveTime: 4
   minIdleTime: 1
   maxIdleTime: 2
+  collisionCooldown: 0.5
   skins:
   - {fileID: 8769703126096709937}
   - {fileID: 5992547284606611070}

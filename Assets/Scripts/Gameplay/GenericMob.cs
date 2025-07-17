@@ -6,24 +6,16 @@ public class GenericMob : CharacterMovement
     [Header("Mob settings")]
     [SerializeField] private Collider mainCollider;
     [SerializeField] private LayerMask obstacleLayer = 0;
-    [SerializeField][Min(0f)] private float minMoveTime = 2f, maxMoveTime = 4f, minIdleTime = 1f, maxIdleTime = 2f;
+    [SerializeField][Min(0f)] private float minMoveTime = 2f, maxMoveTime = 4f, minIdleTime = 1f, maxIdleTime = 2f, collisionCooldown = 0.5f;
     [SerializeField] private List<GameObject> skins;
 
     private GameObject activeSkin = null;
     private HandleRagdoll ragdoll = null;
     private bool isConscious = true;
-    private float movementDelta = 0f, idleDelta = 0f;
-    private float movementTime = 0f, idleTime = 0f;
-    private Vector2 lastDirection = default;
-
-    public override Vector2 MovementInput
-    {
-        get
-        {
-            if (isConscious) return GetDirection();
-            else return Vector2.zero;
-        }
-    }
+    private float lastCollisionTime = -Mathf.Infinity;
+    private float movementTimer = 0f, idleTimer = 0f;
+    private float movementDuration = 0f, idleDuration = 0f;
+    private Vector2 currentDirection = default;
 
     private void OnValidate()
     {
@@ -46,8 +38,14 @@ public class GenericMob : CharacterMovement
         base.Start();
 
         // Choose a random direction and a amount of time to move
-        lastDirection = new(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-        movementTime = Random.Range(minMoveTime, maxMoveTime);
+        currentDirection = new(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+        movementDuration = Random.Range(minMoveTime, maxMoveTime);
+    }
+
+    protected override void Update()
+    {
+        movementInput = GetDirection();
+        base.Update();
     }
 
     private void OnEnable()
@@ -74,6 +72,29 @@ public class GenericMob : CharacterMovement
         EventsManager.RemoveSubscriber<OnDropCorpse>(RestoreInitialState);
     }
 
+    private Vector2 GetDirection()
+    {
+        if (!isConscious) return Vector2.zero;
+
+        float delta = Time.deltaTime;
+
+        idleTimer += delta;
+        if (idleTimer < idleDuration) return Vector2.zero;
+
+        movementTimer += delta;
+        if (movementTimer >= movementDuration)
+        {
+            currentDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+
+            idleDuration = Random.Range(minIdleTime, maxIdleTime);
+            movementDuration = Random.Range(minMoveTime, maxMoveTime);
+
+            movementTimer = 0f;
+            idleTimer = 0f;
+        }
+        return currentDirection;
+    }
+
     private void RestoreInitialState(OnDropCorpse evt)
     {
         if (!evt.id.Equals(transform.GetInstanceID())) return;
@@ -82,29 +103,6 @@ public class GenericMob : CharacterMovement
         ragdoll.RestoreInitialState();
         ToggleMovement(true);
         gameObject.SetActive(false);
-    }
-
-    // Mobs start moving in a random direction for the given movement time
-    // After they choose another random direction and wait for the idle time
-    private Vector2 GetDirection()
-    {
-        float delta = Time.deltaTime;
-
-        idleDelta += delta;
-        if (idleDelta < idleTime) return Vector2.zero;
-
-        movementDelta += delta;
-        if (movementDelta >= movementTime)
-        {
-            lastDirection = new(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-
-            idleTime = Random.Range(minIdleTime, maxIdleTime);
-            movementTime = Random.Range(minMoveTime, maxMoveTime);
-
-            movementDelta = 0f;
-            idleDelta = 0f;
-        }
-        return lastDirection.normalized;
     }
 
     private void ToggleMovement(bool state)
@@ -138,17 +136,26 @@ public class GenericMob : CharacterMovement
     {
         if ((obstacleLayer & (1 << collision.gameObject.layer)) == 0) return;
 
-        // Bounce of obstacles
-        Vector3 newDirection = Vector3.zero;
+        if (Time.time - lastCollisionTime < collisionCooldown) return;
+        lastCollisionTime = Time.time;
 
-        for (int i = 0; i < collision.contactCount; i++)
+        // Makes an agregate with every contact point normal
+        Vector3 totalNormal = Vector3.zero;
+        foreach (var contact in collision.contacts) totalNormal += contact.normal;
+        Vector3 averageNormal = totalNormal.normalized;
+
+        // Project vector to XZ plane
+        Vector2 newDir = new(averageNormal.x, averageNormal.z);
+        if (newDir.sqrMagnitude < 0.1f) // fallback in case normal is almost zero
         {
-            newDirection += collision.GetContact(i).normal;
+            newDir = new(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
         }
 
-        if (Mathf.Abs(newDirection.x) < 0.01f) newDirection.x = Random.Range(-0.5f, 0.5f);
-        if (Mathf.Abs(newDirection.z) < 0.01f) newDirection.z = Random.Range(-0.5f, 0.5f);
+        currentDirection = newDir.normalized;
 
-        direction = newDirection.normalized;
+        // Reset only movement timer so the mob instantly change it's movement direction
+        movementTimer = 0f;
+        movementDuration = Random.Range(minMoveTime, maxMoveTime);
     }
+
 }

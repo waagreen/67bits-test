@@ -10,11 +10,23 @@ public class MobSpawner : MonoBehaviour
     private Queue<GenericMob> mobs;
     private const float kSpawnInterval = 6f;
     private float spawnTimer;
+    private int bodyCount, bodyGoal;
 
     void OnValidate()
     {
         initalAmount = Mathf.Min(initalAmount, totalAmount);
         totalAmount = Mathf.Max(initalAmount, totalAmount);
+    }
+
+    private void Awake()
+    {
+        bodyGoal = initalAmount;
+        EventsManager.AddSubscriber<OnDropCorpse>(UpdateBodyCount);
+    }
+
+    private void OnDestroy()
+    {
+        EventsManager.RemoveSubscriber<OnDropCorpse>(UpdateBodyCount);
     }
 
     private void Start()
@@ -28,7 +40,7 @@ public class MobSpawner : MonoBehaviour
             Vector3 position = Random.insideUnitSphere * spawnRadius;
             position.y = heightOffset;
 
-            GenericMob mob = Instantiate(mobReference, position, Quaternion.identity, transform);
+            GenericMob mob = Instantiate(mobReference, transform.position + position, Quaternion.identity, transform);
             bool active = i < initalAmount;
             mob.gameObject.SetActive(active);
             if (!active) mobs.Enqueue(mob);
@@ -48,7 +60,21 @@ public class MobSpawner : MonoBehaviour
 
     private void Spawn()
     {
+        if ((mobs == null) || (mobs.Count < 1)) return;
         mobs.Dequeue().gameObject.SetActive(true);
+    }
+
+    private void UpdateBodyCount(OnDropCorpse evt)
+    {
+        bodyCount = Mathf.Min(bodyGoal, bodyCount + 1);
+        CheckGameStatus();
+    }
+
+    private void CheckGameStatus()
+    {
+        if (bodyCount < bodyGoal) return;
+
+        EventsManager.Broadcast(new OnEndGame());
     }
 
     private void OnDrawGizmosSelected()

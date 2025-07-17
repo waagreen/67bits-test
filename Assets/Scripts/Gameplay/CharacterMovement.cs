@@ -6,12 +6,10 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField][Min(0f)] protected float speed = 10f, acceleration = 30f, rotationSpeed = 50f;
     [SerializeField][Range(0f, 1f)] private float lookSmoothTime = 0.1f;
 
-    protected CharacterAnimator anim;
     protected Rigidbody rb;
-    protected Vector3 velocity = default, desiredVelocity = default, lookVelocity = default;
-    protected Vector3 direction = default, smoothLookDirection = default;
-
-    public virtual Vector2 MovementInput { get; set; }
+    protected CharacterAnimator anim;
+    protected Vector3 velocity, desiredVelocity, lookVelocity, direction, smoothLookDirection;
+    protected Vector2 movementInput;
 
     protected virtual void Start()
     {
@@ -22,29 +20,30 @@ public class CharacterMovement : MonoBehaviour
 
     protected virtual void Update()
     {
-        direction = new(MovementInput.x, 0f, MovementInput.y);
-        desiredVelocity = speed * direction;
+        direction = new(movementInput.x, 0f, movementInput.y);
 
-        if (anim) anim.Movement = direction;
+        bool hasValue = direction.HasMeaningfulValue();
+
+        desiredVelocity = hasValue ? speed * direction : Vector3.zero; 
+        if (anim) anim.Movement = hasValue ? direction : Vector2.zero;
     }
-    
+
     protected virtual void FixedUpdate()
     {
-        HandleRotation();
-        HandleVelocity();
+        if (direction.HasMeaningfulValue())
+        {
+            HandleRotation();
+            HandleVelocity();
+        }
+        else
+        {
+            rb.linearVelocity = Vector3.zero;
+        }
     }
 
     private void HandleRotation()
     {
-        if (direction.sqrMagnitude < 0.01f) return;
-
-        smoothLookDirection = Vector3.SmoothDamp
-        (
-            smoothLookDirection,
-            direction,
-            ref lookVelocity,
-            lookSmoothTime
-        );
+        smoothLookDirection = Vector3.SmoothDamp(smoothLookDirection, direction, ref lookVelocity, lookSmoothTime);
 
         float angle = Mathf.Atan2(smoothLookDirection.x, smoothLookDirection.z) * Mathf.Rad2Deg;
         Quaternion targetRotation = Quaternion.Euler(0, angle, 0);

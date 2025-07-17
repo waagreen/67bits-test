@@ -21,14 +21,18 @@ public class Player : CharacterMovement
     private float nextCollectTime = 0f; 
     private int strength;
 
-    public override Vector2 MovementInput => inputs.Player.Move.ReadValue<Vector2>();
-
     private void Awake()
     {
         inputs = new();
         inputs.Enable();
 
         EventsManager.AddSubscriber<OnLevelUp>(UpdateStats);
+    }
+
+    protected override void Update()
+    {
+        movementInput = inputs.Player.Move.ReadValue<Vector2>();
+        base.Update();
     }
 
     private void OnDestroy()

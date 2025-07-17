@@ -63,7 +63,7 @@ public class PlayerProfile : MonoBehaviour
         EventsManager.Broadcast(new OnExperienceChange { previous = currentExperience, delta = -evt.cost });
     }
 
-    private void CleanupStaticData()
+    public static void CleanupStaticData()
     {
         currentExperience = 0;
         speedLevel = 0;
